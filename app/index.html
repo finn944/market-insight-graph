@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Market Insight Graph</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Workspace navigation">
+        <div class="brand">
+          <div class="brand-mark" aria-hidden="true">M</div>
+          <div>
+            <div class="brand-name">Market Insight Graph</div>
+            <div class="brand-subtitle">Evidence to strategy</div>
+          </div>
+        </div>
+
+        <nav class="nav-list" aria-label="Primary">
+          <button class="nav-item active" data-view="workspace" type="button">
+            <span class="nav-icon" aria-hidden="true">[]</span>
+            Workspace
+          </button>
+          <button class="nav-item" data-view="graph" type="button">
+            <span class="nav-icon" aria-hidden="true">()</span>
+            Graph
+          </button>
+          <button class="nav-item" data-view="briefs" type="button">
+            <span class="nav-icon" aria-hidden="true">==</span>
+            Briefs
+          </button>
+        </nav>
+
+        <div class="source-panel">
+          <div class="panel-label">Source Mix</div>
+          <div class="source-row">
+            <span>Audience voice</span>
+            <strong>42%</strong>
+          </div>
+          <div class="source-row">
+            <span>Competitors</span>
+            <strong>23%</strong>
+          </div>
+          <div class="source-row">
+            <span>Owned feedback</span>
+            <strong>19%</strong>
+          </div>
+          <div class="source-row">
+            <span>Industry sources</span>
+            <strong>16%</strong>
+          </div>
+        </div>
+      </aside>
+
+      <main class="main">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Insight workspace</p>
+            <h1>Build a living map of market evidence.</h1>
+          </div>
+          <div class="top-actions" aria-label="Workspace actions">
+            <button class="icon-button" id="resetDemo" type="button" title="Reset demo data" aria-label="Reset demo data">R</button>
+            <button class="primary-button" id="focusCapture" type="button">Capture Signal</button>
+          </div>
+        </header>
+
+        <section class="metrics-grid" aria-label="Insight metrics">
+          <article class="metric">
+            <span class="metric-label">Evidence</span>
+            <strong id="metricEvidence">0</strong>
+            <span class="metric-note">captured items</span>
+          </article>
+          <article class="metric">
+            <span class="metric-label">Signals</span>
+            <strong id="metricSignals">0</strong>
+            <span class="metric-note">structured observations</span>
+          </article>
+          <article class="metric">
+            <span class="metric-label">Insights</span>
+            <strong id="metricInsights">0</strong>
+            <span class="metric-note">active briefs</span>
+          </article>
+          <article class="metric">
+            <span class="metric-label">Confidence</span>
+            <strong id="metricConfidence">0%</strong>
+            <span class="metric-note">average strength</span>
+          </article>
+        </section>
+
+        <section class="view view-active" id="workspaceView">
+          <div class="workspace-grid">
+            <section class="capture-panel" aria-labelledby="captureTitle">
+              <div class="section-heading">
+                <div>
+                  <p class="eyebrow">Inbox</p>
+                  <h2 id="captureTitle">Capture Market Evidence</h2>
+                </div>
+                <span class="status-pill">Manual MVP</span>
+              </div>
+
+              <form class="capture-form" id="captureForm">
+                <label>
+                  Source
+                  <input id="sourceInput" name="source" type="text" placeholder="LinkedIn thread, customer call, competitor page" required>
+                </label>
+                <label>
+                  Signal
+                  <textarea id="signalInput" name="signal" rows="4" placeholder="What did the market reveal?" required></textarea>
+                </label>
+                <div class="form-row">
+                  <label>
+                    Type
+                    <select id="typeInput" name="type">
+                      <option value="pain_point">Pain point</option>
+                      <option value="desire">Desire</option>
+                      <option value="objection">Objection</option>
+                      <option value="trend">Trend</option>
+                      <option value="competitor_move">Competitor move</option>
+                      <option value="language_pattern">Language pattern</option>
+                    </select>
+                  </label>
+                  <label>
+                    Audience
+                    <input id="audienceInput" name="audience" type="text" placeholder="Independent operators">
+                  </label>
+                </div>
+                <button class="primary-button full-width" type="submit">Add To Graph</button>
+              </form>
+            </section>
+
+            <section class="signal-panel" aria-labelledby="signalsTitle">
+              <div class="section-heading">
+                <div>
+                  <p class="eyebrow">Triage</p>
+                  <h2 id="signalsTitle">Recent Signals</h2>
+                </div>
+                <button class="ghost-button" id="clusterSignals" type="button">Cluster</button>
+              </div>
+              <div class="signal-list" id="signalList"></div>
+            </section>
+          </div>
+        </section>
+
+        <section class="view" id="graphView">
+          <div class="graph-layout">
+            <section class="graph-panel" aria-labelledby="graphTitle">
+              <div class="section-heading graph-heading">
+                <div>
+                  <p class="eyebrow">Zettelkasten</p>
+                  <h2 id="graphTitle">Interactive Insight Graph</h2>
+                </div>
+                <div class="segmented-control" aria-label="Graph filter">
+                  <button class="segment active" data-filter="all" type="button">All</button>
+                  <button class="segment" data-filter="insight" type="button">Insights</button>
+                  <button class="segment" data-filter="signal" type="button">Signals</button>
+                  <button class="segment" data-filter="content" type="button">Content</button>
+                </div>
+              </div>
+              <svg id="graphCanvas" viewBox="0 0 900 520" role="img" aria-label="Connected market insight graph"></svg>
+            </section>
+
+            <aside class="detail-panel" aria-labelledby="detailTitle">
+              <p class="eyebrow">Selected node</p>
+              <h2 id="detailTitle">Strategy Without Planning Theater</h2>
+              <p id="detailSummary"></p>
+              <div class="detail-meta" id="detailMeta"></div>
+              <div class="detail-actions">
+                <button class="primary-button" id="promoteNode" type="button">Promote To Insight</button>
+                <button class="ghost-button" id="contentNode" type="button">Create Content Idea</button>
+              </div>
+              <div class="linked-list" id="linkedList"></div>
+            </aside>
+          </div>
+        </section>
+
+        <section class="view" id="briefsView">
+          <div class="briefs-grid" id="briefsGrid"></div>
+        </section>
+      </main>
+    </div>
+
+    <div class="modal-backdrop" id="insightModal" hidden>
+      <section class="modal" role="dialog" aria-modal="true" aria-labelledby="insightModalTitle">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Promote signal</p>
+            <h2 id="insightModalTitle">Create Insight Brief</h2>
+          </div>
+          <button class="icon-button" id="closeInsightModal" type="button" aria-label="Close insight form">X</button>
+        </div>
+        <form class="capture-form" id="insightForm">
+          <label>
+            Insight title
+            <input id="insightTitleInput" name="title" type="text" required>
+          </label>
+          <label>
+            Thesis
+            <textarea id="insightThesisInput" name="thesis" rows="4" required></textarea>
+          </label>
+          <label>
+            Why it matters
+            <textarea id="insightWhyInput" name="why" rows="3" required></textarea>
+          </label>
+          <label>
+            Strategic action
+            <input id="insightActionInput" name="action" type="text" required>
+          </label>
+          <button class="primary-button full-width" type="submit">Create Insight</button>
+        </form>
+      </section>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
