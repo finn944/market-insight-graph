@@ -47,15 +47,34 @@ http://127.0.0.1:5173/index.html
 
 Current prototype features:
 
-- manual market evidence capture
-- recent signal triage
-- interactive insight graph
-- draggable graph nodes with saved positions
-- selected-node detail panel
+- source registry for watched communities, competitors, newsletters, and owned feedback
+- RSS discovery map for clean energy, grid, EV charging, storage, policy, data, and capital feeds
+- evidence inbox with source, URL/location, audience, status, and quality scoring
+- evidence-to-signal extraction workflow
 - signal-to-insight promotion flow
-- insight-to-content idea creation
-- structured insight briefs
+- support and contradiction links into insight briefs
+- interactive draggable graph with saved positions
+- source-backed insight briefs with evidence, contradictions, why-now, implications, and actions
+- search across evidence, signals, insights, content ideas, and decisions
+- signal clustering by pattern type
+- open research questions and activation outputs
 - local demo data reset
+
+## Source Discovery
+
+The Sources view now includes a curated RSS discovery panel. Feeds can be searched, reviewed, and added directly into the source registry as watched RSS sources.
+
+The first feed map is documented in [RSS Source Map](docs/rss-source-map.md). It covers clean energy deployment, grid and utilities, EV charging, storage, commercial energy, policy/data, research, and capital allocation.
+
+## Brand Direction
+
+The prototype now follows the FINN-WILSON. brand guidelines:
+
+- Dark Navy `#182241`, Deep Blue `#171E36`, White, and Light Grey do the visual work
+- Inter is the only typeface
+- tone is direct, analytical, human, and quietly confident
+- demo evidence is focused on clean energy, electrification, capital allocation, and deployment
+- the working thesis is: make energy systems deployable
 
 ## Docs
 
@@ -63,5 +82,6 @@ Current prototype features:
 - [Architecture](docs/architecture.md)
 - [Data Model](docs/data-model.md)
 - [Source Strategy](docs/source-strategy.md)
+- [RSS Source Map](docs/rss-source-map.md)
 - [Insight Brief Format](docs/insight-brief-format.md)
 - [Roadmap](docs/roadmap.md)
