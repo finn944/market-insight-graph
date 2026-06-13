@@ -1130,3 +1130,57 @@ function formatType(value) {
 function escapeHtml(value) {
   return String(value).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
 }
+
+// ════════════════════════════════════════════════════════════════════════
+// EXPORT / IMPORT
+// ════════════════════════════════════════════════════════════════════════
+
+const DATA_KEYS = [
+  "marketInsightGraphState",
+  "marketInsightGraphLayout",
+  "marketInsightGraphEdges",
+  "fw-network-profiles",
+  "fw-content-drafts"
+];
+
+document.getElementById("exportData").addEventListener("click", () => {
+  const backup = {};
+  DATA_KEYS.forEach(key => {
+    const val = localStorage.getItem(key);
+    if (val) backup[key] = JSON.parse(val);
+  });
+  backup._exported = new Date().toISOString();
+  backup._version = "1.0";
+
+  const blob = new Blob([JSON.stringify(backup, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  const date = new Date().toISOString().slice(0, 10);
+  a.download = `fw-intelligence-${date}.json`;
+  a.href = url;
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
+document.getElementById("importData").addEventListener("change", (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    try {
+      const backup = JSON.parse(ev.target.result);
+      let restored = 0;
+      DATA_KEYS.forEach(key => {
+        if (backup[key]) {
+          localStorage.setItem(key, JSON.stringify(backup[key]));
+          restored++;
+        }
+      });
+      alert(`Restored ${restored} data sets from backup (exported ${backup._exported ? backup._exported.slice(0,10) : "unknown date"}). Reloading.`);
+      window.location.reload();
+    } catch {
+      alert("Could not read that file. Make sure it's a FINN-WILSON. backup JSON.");
+    }
+  };
+  reader.readAsText(file);
+});
