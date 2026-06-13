@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FINN-WILSON. Content Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #182241;
+  --navy-deep: #111827;
+  --navy-mid: #1e3055;
+  --white: #ffffff;
+  --grey-50: #f8f9fa;
+  --grey-100: #f2f2f2;
+  --grey-200: #e5e7eb;
+  --grey-300: #d1d5db;
+  --grey-500: #6b7280;
+  --grey-700: #374151;
+  --grey-900: #111827;
+  --green: #16a34a;
+  --amber: #d97706;
+  --signal-blue: #2e5ba8;
+  --radius: 8px;
+  --radius-lg: 12px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; font-family: 'Inter', ui-sans-serif, system-ui, sans-serif; background: var(--grey-50); color: var(--grey-900); font-size: 14px; }
+button { cursor: pointer; font: inherit; }
+textarea, input { font: inherit; }
+
+/* Layout */
+.studio { display: grid; grid-template-rows: 52px 1fr; height: 100vh; overflow: hidden; }
+
+/* Top bar */
+.topbar { background: var(--navy); display: flex; align-items: center; justify-content: space-between; padding: 0 24px; }
+.topbar-brand { display: flex; align-items: center; gap: 12px; }
+.topbar-wordmark { color: var(--white); font-size: 15px; font-weight: 700; letter-spacing: -0.01em; }
+.topbar-wordmark span { opacity: 0.5; font-weight: 400; margin-left: 8px; font-size: 13px; letter-spacing: 0; }
+.topbar-right { display: flex; gap: 8px; align-items: center; }
+.topbar-link { color: rgba(255,255,255,0.5); font-size: 12px; text-decoration: none; }
+.topbar-link:hover { color: white; }
+
+/* Three panels */
+.panels { display: grid; grid-template-columns: 260px 1fr 380px; gap: 0; overflow: hidden; }
+
+/* Signals panel */
+.signals-panel { background: white; border-right: 1px solid var(--grey-200); display: flex; flex-direction: column; overflow: hidden; }
+.panel-head { padding: 16px 16px 12px; border-bottom: 1px solid var(--grey-200); }
+.panel-head h2 { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: var(--grey-500); }
+.signal-list { flex: 1; overflow-y: auto; padding: 8px; }
+.signal-item { padding: 10px 12px; border-radius: var(--radius); cursor: pointer; border: 1px solid transparent; margin-bottom: 4px; transition: all 0.1s; }
+.signal-item:hover { background: var(--grey-50); border-color: var(--grey-200); }
+.signal-item.active { background: #eef2ff; border-color: var(--signal-blue); }
+.signal-tag { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
+.tag-teardown { color: var(--signal-blue); }
+.tag-thesis { color: #7c3aed; }
+.tag-framework { color: var(--green); }
+.tag-tool { color: var(--amber); }
+.signal-text { font-size: 12px; color: var(--grey-700); line-height: 1.4; }
+.panel-footer { padding: 12px; border-top: 1px solid var(--grey-200); }
+.add-signal-btn { width: 100%; padding: 8px; border: 1px dashed var(--grey-300); border-radius: var(--radius); background: none; color: var(--grey-500); font-size: 12px; transition: all 0.1s; }
+.add-signal-btn:hover { border-color: var(--navy); color: var(--navy); }
+
+/* Add signal modal */
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); display: none; align-items: center; justify-content: center; z-index: 100; }
+.modal-overlay.open { display: flex; }
+.modal { background: white; border-radius: var(--radius-lg); padding: 24px; width: 440px; }
+.modal h3 { font-size: 15px; font-weight: 600; margin-bottom: 16px; }
+.modal label { font-size: 12px; font-weight: 500; color: var(--grey-700); display: block; margin-bottom: 4px; margin-top: 12px; }
+.modal input, .modal textarea, .modal select { width: 100%; border: 1px solid var(--grey-200); border-radius: var(--radius); padding: 8px 10px; font-size: 13px; }
+.modal textarea { resize: vertical; min-height: 80px; }
+.modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px; }
+.btn-cancel { background: none; border: 1px solid var(--grey-200); border-radius: var(--radius); padding: 8px 16px; color: var(--grey-700); }
+.btn-add { background: var(--navy); color: white; border: none; border-radius: var(--radius); padding: 8px 16px; font-weight: 500; }
+
+/* Editor panel */
+.editor-panel { display: flex; flex-direction: column; overflow: hidden; background: var(--grey-50); }
+.format-bar { background: white; border-bottom: 1px solid var(--grey-200); padding: 0 20px; display: flex; align-items: center; gap: 0; }
+.format-tab { padding: 14px 16px; font-size: 12px; font-weight: 500; border: none; background: none; color: var(--grey-500); border-bottom: 2px solid transparent; transition: all 0.1s; }
+.format-tab:hover { color: var(--grey-900); }
+.format-tab.active { color: var(--navy); border-bottom-color: var(--navy); }
+.editor-body { flex: 1; display: flex; flex-direction: column; padding: 20px; gap: 12px; overflow: hidden; }
+.voice-hint { background: white; border: 1px solid var(--grey-200); border-radius: var(--radius); padding: 12px 14px; }
+.voice-hint-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--grey-500); margin-bottom: 4px; }
+.voice-hint-text { font-size: 12px; color: var(--grey-700); line-height: 1.5; }
+.signal-source { background: #eef2ff; border: 1px solid #c7d2fe; border-radius: var(--radius); padding: 8px 12px; font-size: 12px; color: var(--signal-blue); display: none; }
+.signal-source.visible { display: block; }
+.post-textarea { flex: 1; border: 1px solid var(--grey-200); border-radius: var(--radius-lg); padding: 16px; resize: none; background: white; font-size: 14px; line-height: 1.65; color: var(--grey-900); outline: none; }
+.post-textarea:focus { border-color: var(--navy); }
+.editor-footer { display: flex; align-items: center; gap: 10px; padding-top: 4px; }
+.char-count { font-size: 12px; color: var(--grey-500); margin-right: auto; }
+.char-count.near { color: var(--amber); }
+.char-count.over { color: #dc2626; }
+.btn-copy { background: white; border: 1px solid var(--grey-200); border-radius: var(--radius); padding: 9px 16px; font-size: 13px; font-weight: 500; color: var(--grey-700); transition: all 0.1s; }
+.btn-copy:hover { border-color: var(--navy); color: var(--navy); }
+.btn-copy.copied { background: #f0fdf4; border-color: var(--green); color: var(--green); }
+.btn-linkedin { background: var(--navy); color: white; border: none; border-radius: var(--radius); padding: 9px 16px; font-size: 13px; font-weight: 500; transition: opacity 0.1s; }
+.btn-linkedin:hover { opacity: 0.85; }
+.btn-save { background: none; border: none; color: var(--grey-500); font-size: 12px; text-decoration: underline; }
+.btn-save:hover { color: var(--grey-900); }
+
+/* Graphic panel */
+.graphic-panel { background: white; border-left: 1px solid var(--grey-200); display: flex; flex-direction: column; overflow: hidden; }
+.graphic-head { padding: 16px; border-bottom: 1px solid var(--grey-200); }
+.graphic-head h2 { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: var(--grey-500); margin-bottom: 10px; }
+.template-tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
+.tpl-btn { border: 1px solid var(--grey-200); border-radius: 6px; padding: 6px 4px; background: none; font-size: 10px; color: var(--grey-500); font-weight: 500; text-align: center; transition: all 0.1s; }
+.tpl-btn:hover { border-color: var(--navy); color: var(--navy); }
+.tpl-btn.active { background: var(--navy); color: white; border-color: var(--navy); }
+.graphic-preview { flex: 1; display: flex; align-items: center; justify-content: center; padding: 16px; background: var(--grey-100); overflow: hidden; }
+.graphic-preview svg { max-width: 100%; max-height: 100%; border-radius: 4px; box-shadow: 0 4px 24px rgba(0,0,0,0.12); }
+.graphic-controls { padding: 14px 16px; border-top: 1px solid var(--grey-200); display: flex; flex-direction: column; gap: 8px; }
+.gc-row { display: flex; gap: 8px; }
+.gc-input { flex: 1; border: 1px solid var(--grey-200); border-radius: var(--radius); padding: 7px 10px; font-size: 12px; outline: none; }
+.gc-input:focus { border-color: var(--navy); }
+.gc-input::placeholder { color: var(--grey-300); }
+.graphic-actions { display: flex; gap: 8px; }
+.btn-dl { flex: 1; background: var(--navy); color: white; border: none; border-radius: var(--radius); padding: 9px; font-size: 12px; font-weight: 500; }
+.btn-dl:hover { opacity: 0.85; }
+.btn-copy-svg { flex: 1; background: none; border: 1px solid var(--grey-200); border-radius: var(--radius); padding: 9px; font-size: 12px; color: var(--grey-700); }
+.btn-copy-svg:hover { border-color: var(--navy); color: var(--navy); }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--grey-200); border-radius: 4px; }
+</style>
+</head>
+<body>
+
+<div class="studio">
+  <div class="topbar">
+    <div class="topbar-brand">
+      <span class="topbar-wordmark">FINN-WILSON.<span>Content Studio</span></span>
+    </div>
+    <div class="topbar-right">
+      <a class="topbar-link" href="index.html">← Insight Graph</a>
+    </div>
+  </div>
+
+  <div class="panels">
+
+    <!-- SIGNALS PANEL -->
+    <aside class="signals-panel">
+      <div class="panel-head">
+        <h2>Signal Queue</h2>
+      </div>
+      <div class="signal-list" id="signalList">
+        <!-- populated by JS -->
+      </div>
+      <div class="panel-footer">
+        <button class="add-signal-btn" id="openAddSignal">+ Add signal</button>
+      </div>
+    </aside>
+
+    <!-- EDITOR PANEL -->
+    <main class="editor-panel">
+      <div class="format-bar">
+        <button class="format-tab active" data-fmt="teardown">Teardown</button>
+        <button class="format-tab" data-fmt="thesis">Thesis Post</button>
+        <button class="format-tab" data-fmt="framework">Framework</button>
+        <button class="format-tab" data-fmt="tool">Tool Pull</button>
+      </div>
+      <div class="editor-body">
+        <div class="voice-hint">
+          <div class="voice-hint-label" id="hintLabel">From the Field</div>
+          <div class="voice-hint-text" id="hintText">Real numbers, real observation. Feels like a debrief. First person throughout. The numbers are there because you counted them. If you haven't got a real number, go get one — don't invent.</div>
+        </div>
+        <div class="signal-source" id="signalSource">
+          <strong>Signal:</strong> <span id="signalSourceText"></span>
+        </div>
+        <textarea class="post-textarea" id="postText" placeholder="Start writing or pick a signal from the left to pull context in..."></textarea>
+        <div class="editor-footer">
+          <span class="char-count" id="charCount">0 / 3000</span>
+          <button class="btn-save" id="btnSave">Save draft</button>
+          <button class="btn-copy" id="btnCopy">Copy post</button>
+          <button class="btn-linkedin" id="btnLinkedIn">Open LinkedIn ↗</button>
+        </div>
+      </div>
+    </main>
+
+    <!-- GRAPHIC PANEL -->
+    <aside class="graphic-panel">
+      <div class="graphic-head">
+        <h2>Graphic Studio</h2>
+        <div class="template-tabs">
+          <button class="tpl-btn active" data-tpl="quote">Quote</button>
+          <button class="tpl-btn" data-tpl="stat">Stat</button>
+          <button class="tpl-btn" data-tpl="framework">Framework</button>
+          <button class="tpl-btn" data-tpl="split">Split</button>
+        </div>
+      </div>
+      <div class="graphic-preview" id="graphicPreview">
+        <!-- SVG rendered here -->
+      </div>
+      <div class="graphic-controls">
+        <div class="gc-row">
+          <input class="gc-input" id="gcHeadline" placeholder="Headline — the bold claim..." maxlength="120">
+        </div>
+        <div class="gc-row">
+          <input class="gc-input" id="gcSubtext" placeholder="Subtext — the supporting line..." maxlength="140">
+        </div>
+        <div class="gc-row">
+          <input class="gc-input" id="gcStat" placeholder="Stat (for Stat card: e.g. 73%)" maxlength="20" style="max-width:100px;">
+          <input class="gc-input" id="gcStatLabel" placeholder="Stat label..." maxlength="80">
+        </div>
+        <div class="graphic-actions">
+          <button class="btn-copy-svg" id="btnCopySvg">Copy SVG</button>
+          <button class="btn-dl" id="btnDownload">Download PNG</button>
+        </div>
+      </div>
+    </aside>
+
+  </div>
+</div>
+
+<!-- Add Signal Modal -->
+<div class="modal-overlay" id="addSignalModal">
+  <div class="modal">
+    <h3>Add signal to queue</h3>
+    <label>Signal text</label>
+    <textarea id="newSignalText" placeholder="What did you observe? Be specific — a number, a quote, a pattern."></textarea>
+    <label>Source</label>
+    <input type="text" id="newSignalSource" placeholder="HeyReach inbox / LinkedIn thread / Prologis field / News">
+    <label>Best format fit</label>
+    <select id="newSignalFormat">
+      <option value="teardown">Teardown (real numbers, field observation)</option>
+      <option value="thesis">Thesis Post (news + operating-model lens)</option>
+      <option value="framework">Framework (principle or pattern to name)</option>
+      <option value="tool">Tool Pull (decision to visualise + tool CTA)</option>
+    </select>
+    <div class="modal-actions">
+      <button class="btn-cancel" id="closeModal">Cancel</button>
+      <button class="btn-add" id="confirmAddSignal">Add signal</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const NAV = '#182241';
+const NAV_MID = '#1e3055';
+const WHITE = '#ffffff';
+const GREY = '#f2f2f2';
+
+// ── State ──────────────────────────────────────────────────────────────────
+let signals = [];
+let selectedSignal = null;
+let currentFormat = 'teardown';
+let currentTemplate = 'quote';
+
+// ── Seed signals from market-insight-graph localStorage ───────────────────
+function loadSignals() {
+  const base = [
+    { id: 's1', format: 'teardown', source: 'Prologis field', text: 'Most depot charging business cases won\'t hit positive NOI within five years — grid, tariff, and ops model all designed backwards.' },
+    { id: 's2', format: 'thesis',   source: 'Fröjd (HeyReach) + Decade Energy €22M', text: 'Decade Energy €22M raise — zero-CapEx model separates operating model from asset ownership. Finance and ops need to be designed together.' },
+    { id: 's3', format: 'thesis',   source: 'Papamichalis (HeyReach)', text: 'Shell Recharge selling down — public CPO model built on infrastructure assumptions is repricing to retail reality.' },
+    { id: 's4', format: 'framework',source: 'van den Heuvel (HeyReach)', text: 'Shared depot charging (HDC): lease, metering, and liability break the commercial model before the hardware does.' },
+    { id: 's5', format: 'teardown', source: 'Prologis estate', text: 'eHGV peak demand, BESS retrofit debt, and commissioning handover — three things I didn\'t understand until I was inside it.' },
+    { id: 's6', format: 'framework',source: '15yr programme pattern', text: 'Four deployment gates where programmes stall: Grid, Commercial model, Ops handover, Scale. Most operators hit all four.' },
+    { id: 's7', format: 'thesis',   source: 'Fröjd + Nordic market research', text: 'BESS merchant business repricing — anchor use case is demand tariff avoidance, not flexibility market arbitrage.' },
+    { id: 's8', format: 'tool',     source: 'ERA tool', text: 'ERA readiness score — five zones: grid, commercial model, lease/planning, ops capability, stakeholder alignment.' },
+  ];
+  try {
+    const saved = JSON.parse(localStorage.getItem('market-insight-graph') || '{}');
+    const graphSignals = (saved.signals || []).map(s => ({
+      id: s.id, format: guessFormat(s.type), source: s.source, text: s.statement
+    }));
+    signals = [...base, ...graphSignals];
+  } catch { signals = base; }
+}
+
+function guessFormat(type) {
+  if (type === 'pain_point') return 'teardown';
+  if (type === 'competitor_move') return 'thesis';
+  if (type === 'language_pattern') return 'framework';
+  return 'teardown';
+}
+
+function saveSignals() {
+  try {
+    const saved = JSON.parse(localStorage.getItem('market-insight-graph') || '{}');
+    saved.contentSignals = signals.filter(s => s.id.startsWith('custom-'));
+    localStorage.setItem('market-insight-graph', JSON.stringify(saved));
+  } catch {}
+}
+
+// ── Render signals ─────────────────────────────────────────────────────────
+function renderSignals() {
+  const list = document.getElementById('signalList');
+  list.innerHTML = signals.map(s => `
+    <div class="signal-item ${selectedSignal?.id === s.id ? 'active' : ''}" data-id="${s.id}">
+      <div class="signal-tag tag-${s.format}">${formatLabel(s.format)}</div>
+      <div class="signal-text">${escHtml(s.text.slice(0, 100))}${s.text.length > 100 ? '…' : ''}</div>
+    </div>`).join('');
+  list.querySelectorAll('.signal-item').forEach(el => {
+    el.addEventListener('click', () => selectSignal(el.dataset.id));
+  });
+}
+
+function formatLabel(f) {
+  return { teardown: 'Teardown', thesis: 'Thesis Post', framework: 'Framework', tool: 'Tool Pull' }[f] || f;
+}
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function selectSignal(id) {
+  selectedSignal = signals.find(s => s.id === id);
+  if (!selectedSignal) return;
+  // Switch format tab to match signal
+  setFormat(selectedSignal.format);
+  // Show signal source
+  const src = document.getElementById('signalSource');
+  src.classList.add('visible');
+  document.getElementById('signalSourceText').textContent = selectedSignal.source + ' — ' + selectedSignal.text.slice(0, 80) + (selectedSignal.text.length > 80 ? '…' : '');
+  // Pre-fill headline in graphic panel
+  const headline = document.getElementById('gcHeadline');
+  if (!headline.value) headline.value = selectedSignal.text.slice(0, 80);
+  renderSignals();
+  renderGraphic();
+}
+
+// ── Format tabs ────────────────────────────────────────────────────────────
+const hints = {
+  teardown: {
+    label: 'From the Field',
+    text: 'Real numbers, real observation. Feels like a debrief. First person throughout. If you don\'t have a real number, go get one — don\'t invent. The specific is the whole point.'
+  },
+  thesis: {
+    label: 'Reframe',
+    text: 'Take news everyone saw and apply your lens. "The tech is here. The model isn\'t." Name the real problem — not hardware, not policy, not capital — operating model. Open question at the end, only if you actually want answers.'
+  },
+  framework: {
+    label: 'Scale Lessons',
+    text: 'A principle or pattern you\'ve seen enough times to name. Each point must be falsifiable and earned — no platitudes. If it could appear in anyone\'s post, sharpen it or cut it. Feels like you finally wrote down the thing you keep saying in meetings.'
+  },
+  tool: {
+    label: 'Quick Map',
+    text: 'Two to three lines of tension — the decision people get wrong. Then the diagram. Then one line: "I built a tool that solves this. Link in comments." No fanfare. The link goes in the first comment, not the post.'
+  }
+};
+
+function setFormat(fmt) {
+  currentFormat = fmt;
+  document.querySelectorAll('.format-tab').forEach(t => t.classList.toggle('active', t.dataset.fmt === fmt));
+  document.getElementById('hintLabel').textContent = hints[fmt].label;
+  document.getElementById('hintText').textContent = hints[fmt].text;
+}
+
+document.querySelectorAll('.format-tab').forEach(btn => {
+  btn.addEventListener('click', () => setFormat(btn.dataset.fmt));
+});
+
+// ── Character count ────────────────────────────────────────────────────────
+const ta = document.getElementById('postText');
+const cc = document.getElementById('charCount');
+ta.addEventListener('input', () => {
+  const n = ta.value.length;
+  cc.textContent = n + ' / 3000';
+  cc.className = 'char-count' + (n > 2800 ? ' over' : n > 2500 ? ' near' : '');
+});
+
+// ── Copy post ──────────────────────────────────────────────────────────────
+document.getElementById('btnCopy').addEventListener('click', function() {
+  if (!ta.value) return;
+  navigator.clipboard.writeText(ta.value).then(() => {
+    this.textContent = 'Copied!';
+    this.classList.add('copied');
+    setTimeout(() => { this.textContent = 'Copy post'; this.classList.remove('copied'); }, 2000);
+  });
+});
+
+// ── Open LinkedIn ──────────────────────────────────────────────────────────
+document.getElementById('btnLinkedIn').addEventListener('click', function() {
+  if (ta.value) navigator.clipboard.writeText(ta.value);
+  window.open('https://www.linkedin.com/feed/', '_blank');
+});
+
+// ── Save draft ─────────────────────────────────────────────────────────────
+document.getElementById('btnSave').addEventListener('click', function() {
+  const drafts = JSON.parse(localStorage.getItem('fw-content-drafts') || '[]');
+  drafts.unshift({ id: Date.now(), format: currentFormat, text: ta.value, signal: selectedSignal?.id, saved: new Date().toISOString() });
+  localStorage.setItem('fw-content-drafts', JSON.stringify(drafts.slice(0, 20)));
+  this.textContent = 'Saved ✓';
+  setTimeout(() => { this.textContent = 'Save draft'; }, 2000);
+});
+
+// ── Add signal modal ───────────────────────────────────────────────────────
+document.getElementById('openAddSignal').addEventListener('click', () => {
+  document.getElementById('addSignalModal').classList.add('open');
+});
+document.getElementById('closeModal').addEventListener('click', () => {
+  document.getElementById('addSignalModal').classList.remove('open');
+});
+document.getElementById('addSignalModal').addEventListener('click', e => {
+  if (e.target === e.currentTarget) e.currentTarget.classList.remove('open');
+});
+document.getElementById('confirmAddSignal').addEventListener('click', () => {
+  const text = document.getElementById('newSignalText').value.trim();
+  const source = document.getElementById('newSignalSource').value.trim();
+  const format = document.getElementById('newSignalFormat').value;
+  if (!text) return;
+  const s = { id: 'custom-' + Date.now(), format, source: source || 'Manual', text };
+  signals.unshift(s);
+  saveSignals();
+  renderSignals();
+  document.getElementById('addSignalModal').classList.remove('open');
+  document.getElementById('newSignalText').value = '';
+  document.getElementById('newSignalSource').value = '';
+});
+
+// ── Graphic generation ─────────────────────────────────────────────────────
+['gcHeadline','gcSubtext','gcStat','gcStatLabel'].forEach(id => {
+  document.getElementById(id).addEventListener('input', renderGraphic);
+});
+document.querySelectorAll('.tpl-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    currentTemplate = btn.dataset.tpl;
+    document.querySelectorAll('.tpl-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderGraphic();
+  });
+});
+
+function wrapText(text, maxCharsPerLine) {
+  const words = text.split(' ');
+  const lines = [];
+  let line = '';
+  for (const word of words) {
+    if ((line + ' ' + word).trim().length > maxCharsPerLine) {
+      if (line) lines.push(line);
+      line = word;
+    } else {
+      line = (line + ' ' + word).trim();
+    }
+  }
+  if (line) lines.push(line);
+  return lines;
+}
+
+function renderGraphic() {
+  const headline = document.getElementById('gcHeadline').value || 'Your headline here.';
+  const subtext = document.getElementById('gcSubtext').value || 'The supporting line that gives it context.';
+  const stat = document.getElementById('gcStat').value || '73%';
+  const statLabel = document.getElementById('gcStatLabel').value || 'of depot charging projects won\'t hit positive NOI within five years.';
+
+  let svg = '';
+
+  if (currentTemplate === 'quote') {
+    const lines = wrapText(headline, 42);
+    const textY = 280 - (lines.length * 32) / 2;
+    const textEls = lines.map((l, i) => `<text x="100" y="${textY + i * 44}" font-family="Inter, sans-serif" font-size="36" font-weight="700" fill="${WHITE}" xml:space="preserve">${escSvg(l)}</text>`).join('');
+    const subLines = wrapText(subtext, 55);
+    const subY = textY + lines.length * 44 + 28;
+    const subEls = subLines.map((l, i) => `<text x="100" y="${subY + i * 26}" font-family="Inter, sans-serif" font-size="20" font-weight="400" fill="rgba(255,255,255,0.6)" xml:space="preserve">${escSvg(l)}</text>`).join('');
+    svg = `<svg viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg" style="display:block">
+      <rect width="1200" height="630" fill="${NAV}"/>
+      <rect x="60" y="60" width="4" height="510" fill="rgba(255,255,255,0.15)" rx="2"/>
+      <text x="92" y="92" font-family="Inter, sans-serif" font-size="18" font-weight="700" fill="${WHITE}" letter-spacing="0.5">FINN-WILSON.</text>
+      ${textEls}
+      ${subEls}
+      <line x1="100" y1="560" x2="780" y2="560" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+      <text x="100" y="584" font-family="Inter, sans-serif" font-size="14" font-weight="400" fill="rgba(255,255,255,0.4)">Where energy meets reality.</text>
+    </svg>`;
+
+  } else if (currentTemplate === 'stat') {
+    const labelLines = wrapText(statLabel, 32);
+    const labelY = 400;
+    const labelEls = labelLines.map((l, i) => `<text x="540" y="${labelY + i * 32}" font-family="Inter, sans-serif" font-size="24" font-weight="400" fill="rgba(255,255,255,0.65)" text-anchor="middle" xml:space="preserve">${escSvg(l)}</text>`).join('');
+    svg = `<svg viewBox="0 0 1080 1080" xmlns="http://www.w3.org/2000/svg" style="display:block">
+      <rect width="1080" height="1080" fill="${NAV}"/>
+      <text x="80" y="108" font-family="Inter, sans-serif" font-size="20" font-weight="700" fill="${WHITE}" letter-spacing="0.5">FINN-WILSON.</text>
+      <text x="540" y="340" font-family="Inter, sans-serif" font-size="160" font-weight="800" fill="${WHITE}" text-anchor="middle">${escSvg(stat)}</text>
+      ${labelEls}
+      <line x1="80" y1="980" x2="1000" y2="980" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+      <text x="80" y="1008" font-family="Inter, sans-serif" font-size="16" font-weight="400" fill="rgba(255,255,255,0.4)">Where energy meets reality.</text>
+    </svg>`;
+
+  } else if (currentTemplate === 'framework') {
+    const titleLines = wrapText(headline, 36);
+    const titleEls = titleLines.map((l, i) => `<text x="240" y="${110 + i * 36}" font-family="Inter, sans-serif" font-size="28" font-weight="700" fill="${NAV}" xml:space="preserve">${escSvg(l)}</text>`).join('');
+    const subLines = wrapText(subtext, 58);
+    const subY = 110 + titleLines.length * 36 + 16;
+    const subEls = subLines.map((l, i) => `<text x="240" y="${subY + i * 26}" font-family="Inter, sans-serif" font-size="18" font-weight="400" fill="#374151" xml:space="preserve">${escSvg(l)}</text>`).join('');
+    svg = `<svg viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg" style="display:block">
+      <rect width="1200" height="630" fill="${WHITE}"/>
+      <rect width="180" height="630" fill="${NAV}"/>
+      <text x="90" y="88" font-family="Inter, sans-serif" font-size="14" font-weight="700" fill="${WHITE}" text-anchor="middle" letter-spacing="0.5">FINN</text>
+      <text x="90" y="108" font-family="Inter, sans-serif" font-size="14" font-weight="700" fill="${WHITE}" text-anchor="middle" letter-spacing="0.5">WILSON</text>
+      <text x="90" y="122" font-family="Inter, sans-serif" font-size="14" font-weight="700" fill="${WHITE}" text-anchor="middle">.</text>
+      <line x1="200" y1="60" x2="200" y2="570" stroke="${GREY}" stroke-width="1"/>
+      <rect x="240" y="60" width="4" height="32" fill="${NAV}" rx="2"/>
+      ${titleEls}
+      ${subEls}
+      <text x="1160" y="598" font-family="Inter, sans-serif" font-size="13" font-weight="500" fill="#9ca3af" text-anchor="end">finn-wilson.com</text>
+    </svg>`;
+
+  } else if (currentTemplate === 'split') {
+    const leftLines = wrapText(headline, 28);
+    const leftY = 280 - (leftLines.length * 40) / 2;
+    const leftEls = leftLines.map((l, i) => `<text x="60" y="${leftY + i * 44}" font-family="Inter, sans-serif" font-size="34" font-weight="700" fill="${WHITE}" xml:space="preserve">${escSvg(l)}</text>`).join('');
+    const rightLines = wrapText(subtext, 32);
+    const rightY = 260 - (rightLines.length * 30) / 2;
+    const rightEls = rightLines.map((l, i) => `<text x="660" y="${rightY + i * 34}" font-family="Inter, sans-serif" font-size="22" font-weight="400" fill="${NAV}" xml:space="preserve">${escSvg(l)}</text>`).join('');
+    svg = `<svg viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg" style="display:block">
+      <rect width="600" height="630" fill="${NAV}"/>
+      <rect x="600" width="600" height="630" fill="${WHITE}"/>
+      <text x="60" y="80" font-family="Inter, sans-serif" font-size="16" font-weight="700" fill="${WHITE}" letter-spacing="0.5">FINN-WILSON.</text>
+      <text x="60" y="120" font-family="Inter, sans-serif" font-size="12" font-weight="500" fill="rgba(255,255,255,0.5)" letter-spacing="0.1em">SIGNAL</text>
+      ${leftEls}
+      <line x1="60" y1="560" x2="540" y2="560" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+      <text x="60" y="585" font-family="Inter, sans-serif" font-size="13" fill="rgba(255,255,255,0.35)">Where energy meets reality.</text>
+      <text x="660" y="120" font-family="Inter, sans-serif" font-size="12" font-weight="600" fill="#9ca3af" letter-spacing="0.1em">THE IMPLICATION</text>
+      ${rightEls}
+      <text x="1140" y="598" font-family="Inter, sans-serif" font-size="13" font-weight="500" fill="#9ca3af" text-anchor="end">FINN-WILSON.</text>
+    </svg>`;
+  }
+
+  document.getElementById('graphicPreview').innerHTML = svg;
+}
+
+function escSvg(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+// ── Download PNG ────────────────────────────────────────────────────────────
+document.getElementById('btnDownload').addEventListener('click', () => {
+  const svgEl = document.querySelector('#graphicPreview svg');
+  if (!svgEl) return;
+  const isSquare = currentTemplate === 'stat';
+  const w = isSquare ? 1080 : 1200;
+  const h = isSquare ? 1080 : 630;
+  const svgStr = new XMLSerializer().serializeToString(svgEl);
+  const blob = new Blob([svgStr], { type: 'image/svg+xml' });
+  const url = URL.createObjectURL(blob);
+  const img = new Image();
+  img.onload = () => {
+    const canvas = document.createElement('canvas');
+    canvas.width = w; canvas.height = h;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0, w, h);
+    URL.revokeObjectURL(url);
+    const a = document.createElement('a');
+    a.download = 'fw-graphic-' + currentTemplate + '.png';
+    a.href = canvas.toDataURL('image/png');
+    a.click();
+  };
+  img.src = url;
+});
+
+// ── Copy SVG ────────────────────────────────────────────────────────────────
+document.getElementById('btnCopySvg').addEventListener('click', function() {
+  const svgEl = document.querySelector('#graphicPreview svg');
+  if (!svgEl) return;
+  const svgStr = new XMLSerializer().serializeToString(svgEl);
+  navigator.clipboard.writeText(svgStr).then(() => {
+    this.textContent = 'Copied!';
+    setTimeout(() => { this.textContent = 'Copy SVG'; }, 2000);
+  });
+});
+
+// ── Init ───────────────────────────────────────────────────────────────────
+loadSignals();
+renderSignals();
+renderGraphic();
+</script>
+</body>
+</html>
