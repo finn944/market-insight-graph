@@ -3,30 +3,37 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Market Insight Graph</title>
+    <title>FINN-WILSON. Intelligence Engine</title>
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
     <div class="app-shell">
       <aside class="sidebar" aria-label="Workspace navigation">
         <div class="brand">
-          <div class="brand-mark" aria-hidden="true">M</div>
+          <div class="brand-mark" aria-hidden="true">FW</div>
           <div>
-            <div class="brand-name">Market Insight Graph</div>
-            <div class="brand-subtitle">Evidence to strategy</div>
+            <div class="brand-name">FINN-WILSON.</div>
+            <div class="brand-subtitle">Intelligence Engine</div>
           </div>
         </div>
 
         <nav class="nav-list" aria-label="Primary">
           <button class="nav-item active" data-view="workspace" type="button">
             <span class="nav-icon" aria-hidden="true">[]</span>
-            Workspace
+            Capture
+          </button>
+          <button class="nav-item" data-view="network" type="button">
+            <span class="nav-icon" aria-hidden="true">@</span>
+            Network
           </button>
           <button class="nav-item" data-view="graph" type="button">
             <span class="nav-icon" aria-hidden="true">()</span>
             Graph
           </button>
-          <a class="nav-item" href="content-studio.html" style="text-decoration:none;display:block">✏ Content Studio</a>
+          <button class="nav-item" data-view="content" type="button">
+            <span class="nav-icon" aria-hidden="true">✏</span>
+            Content
+          </button>
           <button class="nav-item" data-view="briefs" type="button">
             <span class="nav-icon" aria-hidden="true">==</span>
             Briefs
@@ -35,83 +42,44 @@
 
         <div class="source-panel">
           <div class="panel-label">Source Mix</div>
-          <div class="source-row">
-            <span>Audience voice</span>
-            <strong>42%</strong>
-          </div>
-          <div class="source-row">
-            <span>Competitors</span>
-            <strong>23%</strong>
-          </div>
-          <div class="source-row">
-            <span>Owned feedback</span>
-            <strong>19%</strong>
-          </div>
-          <div class="source-row">
-            <span>Industry sources</span>
-            <strong>16%</strong>
-          </div>
+          <div class="source-row"><span>Network intel</span><strong id="srcNetwork">—</strong></div>
+          <div class="source-row"><span>Signals</span><strong id="srcSignals">—</strong></div>
+          <div class="source-row"><span>Insights</span><strong id="srcInsights">—</strong></div>
+          <div class="source-row"><span>Confidence</span><strong id="srcConfidence">—</strong></div>
         </div>
       </aside>
 
-      <main class="main">
-        <header class="topbar">
-          <div>
-            <p class="eyebrow">Insight workspace</p>
-            <h1>Build a living map of market evidence.</h1>
-          </div>
-          <div class="top-actions" aria-label="Workspace actions">
-            <button class="icon-button" id="resetDemo" type="button" title="Reset demo data" aria-label="Reset demo data">R</button>
-            <button class="primary-button" id="focusCapture" type="button">Capture Signal</button>
-          </div>
-        </header>
+      <main class="main" id="mainContent">
 
-        <section class="metrics-grid" aria-label="Insight metrics">
-          <article class="metric">
-            <span class="metric-label">Evidence</span>
-            <strong id="metricEvidence">0</strong>
-            <span class="metric-note">captured items</span>
-          </article>
-          <article class="metric">
-            <span class="metric-label">Signals</span>
-            <strong id="metricSignals">0</strong>
-            <span class="metric-note">structured observations</span>
-          </article>
-          <article class="metric">
-            <span class="metric-label">Insights</span>
-            <strong id="metricInsights">0</strong>
-            <span class="metric-note">active briefs</span>
-          </article>
-          <article class="metric">
-            <span class="metric-label">Confidence</span>
-            <strong id="metricConfidence">0%</strong>
-            <span class="metric-note">average strength</span>
-          </article>
-        </section>
-
+        <!-- ═══════════════ WORKSPACE VIEW ═══════════════ -->
         <section class="view view-active" id="workspaceView">
-          <div class="workspace-grid">
+          <header class="topbar">
+            <div>
+              <p class="eyebrow">Signal capture</p>
+              <h1>Capture market evidence.</h1>
+            </div>
+            <div class="top-actions">
+              <button class="icon-button" id="resetDemo" type="button" title="Reset demo data">R</button>
+              <button class="primary-button" id="focusCapture" type="button">Capture Signal</button>
+            </div>
+          </header>
+          <section class="metrics-grid" aria-label="Insight metrics">
+            <article class="metric"><span class="metric-label">Evidence</span><strong id="metricEvidence">0</strong><span class="metric-note">captured items</span></article>
+            <article class="metric"><span class="metric-label">Signals</span><strong id="metricSignals">0</strong><span class="metric-note">structured observations</span></article>
+            <article class="metric"><span class="metric-label">Insights</span><strong id="metricInsights">0</strong><span class="metric-note">active briefs</span></article>
+            <article class="metric"><span class="metric-label">Confidence</span><strong id="metricConfidence">0%</strong><span class="metric-note">average strength</span></article>
+          </section>
+          <div class="workspace-grid" style="margin-top:18px">
             <section class="capture-panel" aria-labelledby="captureTitle">
               <div class="section-heading">
-                <div>
-                  <p class="eyebrow">Inbox</p>
-                  <h2 id="captureTitle">Capture Market Evidence</h2>
-                </div>
+                <div><p class="eyebrow">Inbox</p><h2 id="captureTitle">Capture Market Evidence</h2></div>
                 <span class="status-pill">Manual MVP</span>
               </div>
-
               <form class="capture-form" id="captureForm">
-                <label>
-                  Source
-                  <input id="sourceInput" name="source" type="text" placeholder="LinkedIn thread, customer call, competitor page" required>
-                </label>
-                <label>
-                  Signal
-                  <textarea id="signalInput" name="signal" rows="4" placeholder="What did the market reveal?" required></textarea>
-                </label>
+                <label>Source<input id="sourceInput" name="source" type="text" placeholder="LinkedIn thread, customer call, competitor page" required></label>
+                <label>Signal<textarea id="signalInput" name="signal" rows="4" placeholder="What did the market reveal?" required></textarea></label>
                 <div class="form-row">
-                  <label>
-                    Type
+                  <label>Type
                     <select id="typeInput" name="type">
                       <option value="pain_point">Pain point</option>
                       <option value="desire">Desire</option>
@@ -121,21 +89,14 @@
                       <option value="language_pattern">Language pattern</option>
                     </select>
                   </label>
-                  <label>
-                    Audience
-                    <input id="audienceInput" name="audience" type="text" placeholder="Independent operators">
-                  </label>
+                  <label>Audience<input id="audienceInput" name="audience" type="text" placeholder="Independent operators"></label>
                 </div>
                 <button class="primary-button full-width" type="submit">Add To Graph</button>
               </form>
             </section>
-
             <section class="signal-panel" aria-labelledby="signalsTitle">
               <div class="section-heading">
-                <div>
-                  <p class="eyebrow">Triage</p>
-                  <h2 id="signalsTitle">Recent Signals</h2>
-                </div>
+                <div><p class="eyebrow">Triage</p><h2 id="signalsTitle">Recent Signals</h2></div>
                 <button class="ghost-button" id="clusterSignals" type="button">Cluster</button>
               </div>
               <div class="signal-list" id="signalList"></div>
@@ -143,24 +104,55 @@
           </div>
         </section>
 
+        <!-- ═══════════════ NETWORK VIEW ═══════════════ -->
+        <section class="view" id="networkView">
+          <header class="topbar">
+            <div><p class="eyebrow">Relationship intelligence</p><h1>Know everyone. Call anyone.</h1></div>
+            <div class="top-actions">
+              <button class="ghost-button" id="addProfileBtn" type="button">+ Add Profile</button>
+            </div>
+          </header>
+
+          <!-- Connection Generator -->
+          <div class="connection-generator" style="margin-top:18px">
+            <div class="section-heading">
+              <div><p class="eyebrow">Generated from your insight graph</p><h2>Who to connect with next</h2></div>
+              <span class="status-pill">Auto-generated</span>
+            </div>
+            <div class="gen-targets" id="connectionTargets"></div>
+          </div>
+
+          <!-- Tier 1 -->
+          <div class="profiles-section" style="margin-top:24px">
+            <p class="eyebrow" style="margin-bottom:12px">Tier 1 — Priority relationships</p>
+            <div class="profiles-grid" id="tier1Grid"></div>
+          </div>
+
+          <!-- Tier 2 -->
+          <div class="profiles-section" style="margin-top:20px">
+            <p class="eyebrow" style="margin-bottom:12px">Tier 2 — Growing relationships</p>
+            <div class="profiles-grid" id="tier2Grid"></div>
+          </div>
+        </section>
+
+        <!-- ═══════════════ GRAPH VIEW ═══════════════ -->
         <section class="view" id="graphView">
-          <div class="graph-layout">
-            <section class="graph-panel" aria-labelledby="graphTitle">
-              <div class="section-heading graph-heading">
-                <div>
-                  <p class="eyebrow">Zettelkasten</p>
-                  <h2 id="graphTitle">Interactive Insight Graph</h2>
-                </div>
-                <div class="segmented-control" aria-label="Graph filter">
-                  <button class="segment active" data-filter="all" type="button">All</button>
-                  <button class="segment" data-filter="insight" type="button">Insights</button>
-                  <button class="segment" data-filter="signal" type="button">Signals</button>
-                  <button class="segment" data-filter="content" type="button">Content</button>
-                </div>
+          <header class="topbar">
+            <div><p class="eyebrow">Zettelkasten</p><h1>Interactive Insight Graph</h1></div>
+            <div class="top-actions">
+              <div class="segmented-control" aria-label="Graph filter">
+                <button class="segment active" data-filter="all" type="button">All</button>
+                <button class="segment" data-filter="insight" type="button">Insights</button>
+                <button class="segment" data-filter="signal" type="button">Signals</button>
+                <button class="segment" data-filter="content" type="button">Content</button>
               </div>
+            </div>
+          </header>
+          <div class="graph-layout" style="margin-top:18px">
+            <section class="graph-panel" aria-labelledby="graphTitle">
+              <div class="section-heading graph-heading"><p class="eyebrow">Signal network</p></div>
               <svg id="graphCanvas" viewBox="0 0 900 520" role="img" aria-label="Connected market insight graph"></svg>
             </section>
-
             <aside class="detail-panel" aria-labelledby="detailTitle">
               <p class="eyebrow">Selected node</p>
               <h2 id="detailTitle">Strategy Without Planning Theater</h2>
@@ -168,46 +160,271 @@
               <div class="detail-meta" id="detailMeta"></div>
               <div class="detail-actions">
                 <button class="primary-button" id="promoteNode" type="button">Promote To Insight</button>
-                <button class="ghost-button" id="contentNode" type="button">Create Content Idea</button>
+                <button class="ghost-button" id="contentNode" type="button">Create Content</button>
               </div>
               <div class="linked-list" id="linkedList"></div>
             </aside>
           </div>
         </section>
 
-        <section class="view" id="briefsView">
-          <div class="briefs-grid" id="briefsGrid"></div>
+        <!-- ═══════════════ CONTENT VIEW ═══════════════ -->
+        <section class="view" id="contentView">
+          <div class="content-panels">
+            <!-- Signal queue -->
+            <aside class="cs-panel cs-signals">
+              <div class="cs-panel-head">
+                <p class="eyebrow">Signal Queue</p>
+              </div>
+              <div class="cs-signal-list" id="csSignalList"></div>
+              <div class="cs-panel-foot">
+                <button class="cs-add-btn" id="csAddSignalBtn">+ Add signal</button>
+              </div>
+            </aside>
+
+            <!-- Post editor -->
+            <main class="cs-panel cs-editor">
+              <div class="cs-format-bar">
+                <button class="cs-fmt-tab active" data-fmt="teardown" type="button">Teardown</button>
+                <button class="cs-fmt-tab" data-fmt="thesis" type="button">Thesis Post</button>
+                <button class="cs-fmt-tab" data-fmt="framework" type="button">Framework</button>
+                <button class="cs-fmt-tab" data-fmt="tool" type="button">Tool Pull</button>
+                <div class="cs-voice-score">
+                  <span class="vs-label">Voice</span>
+                  <span class="vs-value" id="vsValue">—</span>
+                </div>
+              </div>
+              <div class="cs-editor-body">
+                <div class="cs-voice-hint">
+                  <span class="cs-hint-stream" id="csHintStream">From the Field</span>
+                  <p class="cs-hint-text" id="csHintText">Real numbers, real observation. Feels like a debrief. First person throughout. If you haven't got a real number, go get one.</p>
+                </div>
+                <div class="cs-hooks" id="csHooks" hidden>
+                  <p class="eyebrow" style="margin-bottom:8px">Suggested hooks — click to use</p>
+                  <div class="cs-hook-list" id="csHookList"></div>
+                </div>
+                <div class="cs-active-signal" id="csActiveSignal" hidden>
+                  <span id="csActiveSignalText"></span>
+                </div>
+                <textarea class="cs-textarea" id="csTextarea" placeholder="Pick a signal or click a hook to start..."></textarea>
+                <div class="cs-voice-flags" id="csVoiceFlags" hidden></div>
+                <div class="cs-footer">
+                  <span class="cs-char-count" id="csCharCount">0 / 3000</span>
+                  <button class="cs-btn-save" id="csBtnSave" type="button">Save draft</button>
+                  <button class="cs-btn-copy" id="csBtnCopy" type="button">Copy</button>
+                  <button class="cs-btn-linkedin" id="csBtnLinkedIn" type="button">Open LinkedIn ↗</button>
+                </div>
+              </div>
+            </main>
+
+            <!-- Graphic studio -->
+            <aside class="cs-panel cs-graphic">
+              <div class="cs-panel-head">
+                <p class="eyebrow" style="margin-bottom:8px">Graphic Studio</p>
+                <div class="cs-tpl-tabs">
+                  <button class="cs-tpl active" data-tpl="quote" type="button">Quote</button>
+                  <button class="cs-tpl" data-tpl="stat" type="button">Stat</button>
+                  <button class="cs-tpl" data-tpl="framework" type="button">Frame</button>
+                  <button class="cs-tpl" data-tpl="split" type="button">Split</button>
+                </div>
+              </div>
+              <div class="cs-graphic-preview" id="csGraphicPreview"></div>
+              <div class="cs-graphic-controls">
+                <input class="cs-gc-input" id="csGcHeadline" placeholder="Headline..." maxlength="120">
+                <input class="cs-gc-input" id="csGcSubtext" placeholder="Subtext..." maxlength="140">
+                <div class="cs-gc-row">
+                  <input class="cs-gc-input" id="csGcStat" placeholder="Stat" maxlength="20" style="max-width:84px">
+                  <input class="cs-gc-input" id="csGcStatLabel" placeholder="Stat label...">
+                </div>
+                <div class="cs-graphic-actions">
+                  <button class="ghost-button" id="csBtnCopySvg" type="button">Copy SVG</button>
+                  <button class="primary-button" id="csBtnDownload" type="button">Download PNG</button>
+                </div>
+              </div>
+            </aside>
+          </div>
         </section>
+
+        <!-- ═══════════════ BRIEFS VIEW ═══════════════ -->
+        <section class="view" id="briefsView">
+          <header class="topbar">
+            <div><p class="eyebrow">Analysis</p><h1>Insight Briefs</h1></div>
+          </header>
+          <div class="briefs-grid" id="briefsGrid" style="margin-top:18px"></div>
+        </section>
+
       </main>
     </div>
 
+    <!-- ═══ MODAL: Promote signal to insight ═══ -->
     <div class="modal-backdrop" id="insightModal" hidden>
       <section class="modal" role="dialog" aria-modal="true" aria-labelledby="insightModalTitle">
         <div class="section-heading">
-          <div>
-            <p class="eyebrow">Promote signal</p>
-            <h2 id="insightModalTitle">Create Insight Brief</h2>
-          </div>
-          <button class="icon-button" id="closeInsightModal" type="button" aria-label="Close insight form">X</button>
+          <div><p class="eyebrow">Promote signal</p><h2 id="insightModalTitle">Create Insight Brief</h2></div>
+          <button class="icon-button" id="closeInsightModal" type="button">✕</button>
         </div>
         <form class="capture-form" id="insightForm">
-          <label>
-            Insight title
-            <input id="insightTitleInput" name="title" type="text" required>
-          </label>
-          <label>
-            Thesis
-            <textarea id="insightThesisInput" name="thesis" rows="4" required></textarea>
-          </label>
-          <label>
-            Why it matters
-            <textarea id="insightWhyInput" name="why" rows="3" required></textarea>
-          </label>
-          <label>
-            Strategic action
-            <input id="insightActionInput" name="action" type="text" required>
-          </label>
+          <label>Insight title<input id="insightTitleInput" name="title" type="text" required></label>
+          <label>Thesis<textarea id="insightThesisInput" name="thesis" rows="4" required></textarea></label>
+          <label>Why it matters<textarea id="insightWhyInput" name="why" rows="3" required></textarea></label>
+          <label>Strategic action<input id="insightActionInput" name="action" type="text" required></label>
           <button class="primary-button full-width" type="submit">Create Insight</button>
+        </form>
+      </section>
+    </div>
+
+    <!-- ═══ MODAL: Profile detail ═══ -->
+    <div class="modal-backdrop" id="profileModal" hidden>
+      <section class="modal profile-modal" role="dialog" aria-modal="true">
+        <div class="profile-modal-header">
+          <div class="profile-avatar large" id="pmAvatar">KF</div>
+          <div style="flex:1;min-width:0">
+            <h2 id="pmName" style="margin:0 0 3px"></h2>
+            <p class="pm-role" id="pmRoleCompany"></p>
+            <p class="pm-location" id="pmLocation"></p>
+          </div>
+          <div class="pm-header-right">
+            <span class="pm-status-badge" id="pmStatusBadge">Warm</span>
+            <button class="icon-button" id="closeProfileModal" type="button">✕</button>
+          </div>
+        </div>
+        <div class="profile-modal-body">
+          <div class="pm-section">
+            <h4>Current Priority</h4>
+            <p id="pmPriority"></p>
+          </div>
+          <div class="pm-section">
+            <h4>What They Know</h4>
+            <p id="pmExpertise"></p>
+          </div>
+          <div class="pm-section">
+            <h4>Personal Intel</h4>
+            <p id="pmBackground" style="margin-bottom:10px"></p>
+            <div class="pm-intel-row">
+              <div class="pm-intel-field"><span class="pm-field-label">Kids</span><span id="pmKids">—</span></div>
+              <div class="pm-intel-field"><span class="pm-field-label">Birthday</span><span id="pmBirthday">—</span></div>
+              <div class="pm-intel-field"><span class="pm-field-label">Phone</span><span id="pmPhone">—</span></div>
+            </div>
+            <button class="pm-edit-btn" id="pmEditPersonalBtn" type="button">+ Add / edit personal intel</button>
+          </div>
+          <div class="pm-section">
+            <h4>Why They Matter</h4>
+            <p id="pmWhyMatters"></p>
+          </div>
+          <div class="pm-section">
+            <h4>Next Action</h4>
+            <p id="pmNextAction" class="pm-next-action"></p>
+          </div>
+          <div class="pm-section">
+            <h4>Touch Points</h4>
+            <div class="pm-touch-points" id="pmTouchPoints"></div>
+            <button class="pm-edit-btn" id="pmLogTouchBtn" type="button">+ Log touch point</button>
+          </div>
+        </div>
+        <div class="profile-modal-footer">
+          <button class="ghost-button" id="pmCreateContent" type="button">Create Content →</button>
+          <button class="icon-button" id="pmCloseFooter" type="button" style="margin-left:auto">✕ Close</button>
+        </div>
+      </section>
+    </div>
+
+    <!-- ═══ MODAL: Add profile ═══ -->
+    <div class="modal-backdrop" id="addProfileModal" hidden>
+      <section class="modal" role="dialog" aria-modal="true">
+        <div class="section-heading">
+          <div><p class="eyebrow">Network</p><h2>Add Profile</h2></div>
+          <button class="icon-button" id="closeAddProfile" type="button">✕</button>
+        </div>
+        <form class="capture-form" id="addProfileForm">
+          <div class="form-row">
+            <label>Name<input name="name" required placeholder="Full name"></label>
+            <label>Tier
+              <select name="tier">
+                <option value="1">Tier 1 — Priority</option>
+                <option value="2">Tier 2 — Growing</option>
+              </select>
+            </label>
+          </div>
+          <div class="form-row">
+            <label>Role<input name="role" placeholder="Head of Fleet Electrification"></label>
+            <label>Company<input name="company" placeholder="DHL Supply Chain"></label>
+          </div>
+          <label>Location<input name="location" placeholder="Netherlands"></label>
+          <label>Background / What they know<textarea name="background" rows="2" placeholder="Who they are, what they work on"></textarea></label>
+          <label>Why they matter<textarea name="why" rows="2" placeholder="Strategic value to you"></textarea></label>
+          <label>Next action<input name="next_action" placeholder="Reply, meeting, research..."></label>
+          <button class="primary-button full-width" type="submit">Add to Network</button>
+        </form>
+      </section>
+    </div>
+
+    <!-- ═══ MODAL: Log touch point ═══ -->
+    <div class="modal-backdrop" id="touchPointModal" hidden>
+      <section class="modal" role="dialog" aria-modal="true">
+        <div class="section-heading">
+          <div><p class="eyebrow">Relationship</p><h2>Log Touch Point</h2></div>
+          <button class="icon-button" id="closeTouchModal" type="button">✕</button>
+        </div>
+        <form class="capture-form" id="touchPointForm">
+          <label>Channel
+            <select name="channel">
+              <option>LinkedIn</option>
+              <option>HeyReach</option>
+              <option>Email</option>
+              <option>Phone</option>
+              <option>Meeting</option>
+              <option>Other</option>
+            </select>
+          </label>
+          <label>Notes<textarea name="note" rows="4" placeholder="What was said, what you learned, what came up..." required></textarea></label>
+          <label>Date<input type="date" name="date" required></label>
+          <button class="primary-button full-width" type="submit">Log It</button>
+        </form>
+      </section>
+    </div>
+
+    <!-- ═══ MODAL: Edit personal intel ═══ -->
+    <div class="modal-backdrop" id="editPersonalModal" hidden>
+      <section class="modal" role="dialog" aria-modal="true">
+        <div class="section-heading">
+          <div><p class="eyebrow">Profile</p><h2>Personal Intel</h2></div>
+          <button class="icon-button" id="closeEditPersonal" type="button">✕</button>
+        </div>
+        <form class="capture-form" id="editPersonalForm">
+          <label>Background<textarea name="background" rows="3"></textarea></label>
+          <div class="form-row">
+            <label>Kids<input name="kids" placeholder="Names, ages..."></label>
+            <label>Birthday<input name="birthday" placeholder="Month / Day"></label>
+          </div>
+          <div class="form-row">
+            <label>Phone<input name="phone" placeholder="+44..."></label>
+            <label>Email<input name="email" type="email"></label>
+          </div>
+          <label>Hobbies / Interests<input name="hobbies"></label>
+          <label>Next action<input name="next_action"></label>
+          <button class="primary-button full-width" type="submit">Save Intel</button>
+        </form>
+      </section>
+    </div>
+
+    <!-- ═══ MODAL: Add content signal ═══ -->
+    <div class="modal-backdrop" id="csAddSignalModal" hidden>
+      <section class="modal" role="dialog" aria-modal="true">
+        <div class="section-heading">
+          <div><p class="eyebrow">Content</p><h2>Add Signal</h2></div>
+          <button class="icon-button" id="closeCsAddSignal" type="button">✕</button>
+        </div>
+        <form class="capture-form" id="csAddSignalForm">
+          <label>Signal<textarea name="text" rows="3" placeholder="What did you observe? Specific — a number, a quote, a pattern." required></textarea></label>
+          <label>Source<input name="source" placeholder="HeyReach inbox / Prologis field / News"></label>
+          <label>Best format
+            <select name="format">
+              <option value="teardown">Teardown (field observation, real numbers)</option>
+              <option value="thesis">Thesis Post (news + operating-model lens)</option>
+              <option value="framework">Framework (principle or pattern to name)</option>
+              <option value="tool">Tool Pull (decision + tool CTA)</option>
+            </select>
+          </label>
+          <button class="primary-button full-width" type="submit">Add Signal</button>
         </form>
       </section>
     </div>
